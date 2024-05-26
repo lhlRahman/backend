@@ -59,6 +59,7 @@ const gptProfession = async (profession, grade) => {
         });
 
         const responseContent = gptResponse.choices[0].message.content;
+        console.log(responseContent);
 
         try {
             const parsedResponse = JSON.parse(responseContent);

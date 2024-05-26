@@ -44,7 +44,7 @@ const gptProfession = async (profession, grade) => {
             ...
         ]
     }
-    Ensure that all times and durations are formatted as strings and adhere to the provided formats.`;
+    Ensure that all times and durations are formatted as strings and adhere to the provided formats. do not include any formatting just the JSON do not including any type of additional formatting simply include purely the JSON to be parsed. `;
 
     for (let attempt = 1; attempt <= 10; attempt++) {
         console.log(`Attempt ${attempt}`);

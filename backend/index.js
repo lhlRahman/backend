@@ -24,6 +24,7 @@ app.post('/quiz', async (req, res) => {
 app.post('/gptCompletion', async (req, res) => {
     try {
         console.log(req.body);
+        console.log(req.query);
 
         const { Value: { messages, subject, grade, profession } } = req.body;
 
@@ -53,7 +54,7 @@ app.post('/gptCompletion', async (req, res) => {
         const response = await gptCompletion(messagesArray);
         console.log('Our response is: ' + response.content);
 
-        res.send(response.content);
+        res.send(response.content || 'No response from GPT-3');
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred while processing your request.');

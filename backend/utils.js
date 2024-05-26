@@ -1,6 +1,6 @@
-import OpenAI from "openai";
-import { configDotenv } from "dotenv";
-import Joi from "joi";
+import OpenAI from 'openai';
+import { configDotenv } from 'dotenv';
+import Joi from 'joi';
 
 configDotenv();
 
@@ -29,7 +29,7 @@ const gptProfession = async (profession, grade) => {
                 "class": "string",
                 "start_time": "string", // in format HH:MM AM/PM
                 "end_time": "string", // in format HH:MM AM/PM
-\            },
+            },
             ...
         ]
     }
@@ -59,19 +59,19 @@ const gptProfession = async (profession, grade) => {
 
             return parsedResponse;
         } catch (error) {
-            if (attempt === 4) {
-                throw new Error("Failed to get a valid JSON response after 4 attempts");
+            if (attempt === 6) {
+                throw new Error("Failed to get a valid JSON response after 6 attempts");
             }
         }
     }
 };
 
-async function gptCompletion(messages) {
-	const chatCompletion = await openai.chat.completions.create({
-		messages: messages,
-		model: 'gpt-4o',
-	});
-	return chatCompletion.choices[0];
-}
+const gptCompletion = async (messages) => {
+    const chatCompletion = await openai.chat.completions.create({
+        messages: messages,
+        model: 'gpt-4o',
+    });
+    return chatCompletion.choices[0].message;
+};
 
 export { gptProfession, gptCompletion };

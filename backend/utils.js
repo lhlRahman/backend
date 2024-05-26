@@ -46,7 +46,7 @@ const gptProfession = async (profession, grade) => {
     }
     Ensure that all times and durations are formatted as strings and adhere to the provided formats.`;
 
-    for (let attempt = 1; attempt <= 6; attempt++) {
+    for (let attempt = 1; attempt <= 10; attempt++) {
         console.log(`Attempt ${attempt}`);
         const gptResponse = await openai.chat.completions.create({
             model: 'gpt-4o',

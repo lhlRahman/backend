@@ -9,6 +9,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.post('/schedule', async (req, res) => {
+    console.log(req.body);
     const { Value: { grade, profession } } = req.body;
     const response = await gptProfession(profession, grade);
     res.send(response);

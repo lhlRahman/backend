@@ -9,8 +9,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.post('/schedule', async (req, res) => {
-    const profession = req.body.prompt;
-    const grade = req.body.grade;
+    const { Value: { grade, profession } } = req.body;
     const response = await gptProfession(profession, grade);
     res.send(response);
 });
@@ -23,7 +22,7 @@ app.post('/gptCompletion', async (req, res) => {
 
         const prompt = {
             role: "system",
-            content: `You are a ${profession}. You are teaching a class of ${grade} students about ${subject}. You must prepare a lesson plan for the class. The lesson`
+            content: `You are a ${profession} teaching a class of ${grade} students about ${subject}. Speak directly to the students and make the lesson engaging and interactive. Introduce the topic, explain the key concepts, provide examples, and ask questions to ensure understanding. Encourage participation and make the learning experience fun and educational.`
         };
 
         function extractMessages(json) {

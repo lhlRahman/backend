@@ -87,19 +87,49 @@ const gptCompletion = async (messages) => {
 
 const genQuiz = async (all) => {
     const prompt = `You are a quiz generator. Based on the following course content, generate a quiz in JSON format. The quiz should consist of multiple-choice questions that test the students' understanding of the provided material. Each question should have four options, and one correct answer. Here is the course content: ${all}. The JSON format should be:
+
     [
         {
-            "question": "string",
-            "option1": "string",
-            "option2": "string",
-            "option3": "string",
-            "option4": "string",
-            "correctOption": "option1" // or option2, option3, option4
+            "question": "string", // A question relevant to the provided course content.
+            "option1": "string", // First possible answer.
+            "option2": "string", // Second possible answer.
+            "option3": "string", // Third possible answer.
+            "option4": "string", // Fourth possible answer.
+            "correctOption": "option1" // The correct answer, which can be "option1", "option2", "option3", or "option4".
         },
         ...
     ]
-    make sure that the format is correct and all the questions are relevant to the course content.
-    `;
+    
+    Ensure the following:
+    1. All questions are directly related to the provided course content.
+    2. The format strictly adheres to the specified JSON structure.
+    3. Each question must be clear and concise.
+    4. Options should be plausible answers to the questions.
+    5. The correct option should be clearly indicated.
+    
+    Example of a valid quiz entry based on arithmetic:
+    
+    [
+        {
+            "question": "What is 5 + 3?",
+            "option1": "7",
+            "option2": "8",
+            "option3": "9",
+            "option4": "10",
+            "correctOption": "option2"
+        },
+        {
+            "question": "Which of the following is a prime number?",
+            "option1": "4",
+            "option2": "6",
+            "option3": "7",
+            "option4": "8",
+            "correctOption": "option3"
+        }
+    ]
+    
+    Use this example as a reference to ensure the output matches the required format.`;
+    
 
     for (let attempt = 1; attempt <= 10; attempt++) {
         console.log(`Attempt ${attempt}`);

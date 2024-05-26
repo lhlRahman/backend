@@ -34,7 +34,7 @@ app.post('/gptCompletion', async (req, res) => {
 
         const prompt = {
             role: "system",
-            content: `You are ${professionValue} teaching a class of ${gradeValue} about ${subjectValue}. Speak directly to the students and make the lesson engaging and interactive. Introduce the topic, explain the key concepts, provide examples, and ask questions to ensure understanding. Encourage participation and make the learning experience fun and educational.`
+            content: `You are ${professionValue} teaching a class of ${gradeValue} about ${subjectValue}. Speak directly to the students and make the lesson engaging and interactive. Introduce the topic, explain the key concepts, provide examples, and ask questions to ensure understanding. Encourage participation and make the learning experience fun and educational. you are a interactive tutor so you must make the lesson interactive and engaging. and you must teach with chucks and confirm with the student, keep your replies to one paragraph max.`
         };
 
         function extractMessages(json) {
@@ -53,7 +53,7 @@ app.post('/gptCompletion', async (req, res) => {
         const response = await gptCompletion(messagesArray);
         console.log('Our response is: ' + JSON.stringify(response));
 
-        res.send(response);
+        res.send(response.content);
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred while processing your request.');

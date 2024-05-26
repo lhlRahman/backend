@@ -27,19 +27,27 @@ app.post('/gptCompletion', async (req, res) => {
 
         const { Value: { messages, subject, grade, profession } } = req.body;
 
+        // Extract and handle the values
+        const subjectValue = subject?.Value || 'a subject';
+        const gradeValue = grade?.Value || 'students';
+        const professionValue = profession?.Value || 'a professional';
+
         const prompt = {
             role: "system",
-            content: `You are a ${profession} teaching a class of ${grade} students about ${subject}. Speak directly to the students and make the lesson engaging and interactive. Introduce the topic, explain the key concepts, provide examples, and ask questions to ensure understanding. Encourage participation and make the learning experience fun and educational.`
+            content: `You are ${professionValue} teaching a class of ${gradeValue} about ${subjectValue}. Speak directly to the students and make the lesson engaging and interactive. Introduce the topic, explain the key concepts, provide examples, and ask questions to ensure understanding. Encourage participation and make the learning experience fun and educational.`
         };
 
         function extractMessages(json) {
-            return json.map(item => ({
+            if (!json || json.Value === null) {
+                return [];
+            }
+            return json.Value.map(item => ({
                 role: item.role,
                 content: item.message,
             }));
         }
 
-        const messagesArray = extractMessages(messages);
+        const messagesArray = messages ? extractMessages(messages) : [];
         messagesArray.unshift(prompt);
 
         const response = await gptCompletion(messagesArray);
@@ -47,10 +55,11 @@ app.post('/gptCompletion', async (req, res) => {
 
         res.send(response);
     } catch (error) {
-        console.error('Error processing request:', error);
-        res.status(500).send({ error: 'An error occurred while processing your request' });
+        console.error(error);
+        res.status(500).send('An error occurred while processing your request.');
     }
 });
+
 
 app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`);

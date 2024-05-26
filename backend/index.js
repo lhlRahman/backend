@@ -51,7 +51,7 @@ app.post('/gptCompletion', async (req, res) => {
         messagesArray.unshift(prompt);
 
         const response = await gptCompletion(messagesArray);
-        console.log('Our response is: ' + JSON.stringify(response));
+        console.log('Our response is: ' + JSON.stringify(response.content));
 
         res.send(response.content);
     } catch (error) {

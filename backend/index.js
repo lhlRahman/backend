@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { gptProfession, gptCompletion } from './utils.js';
+import { gptProfession, gptCompletion, genQuiz } from './utils.js';
 
 const app = express();
 const port = 4000;
@@ -11,6 +11,12 @@ app.use(bodyParser.json());
 app.post('/schedule', async (req, res) => {
     const { Value: { grade, profession } } = req.body;
     const response = await gptProfession(profession, grade);
+    res.send(response);
+});
+
+app.post('/quiz', async (req, res) => {
+   const all = JSON.stringify(req.body)
+    const response = await genQuiz(all);
     res.send(response);
 });
 

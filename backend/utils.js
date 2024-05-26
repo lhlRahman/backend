@@ -18,6 +18,17 @@ const scheduleSchema = Joi.object({
     ).required()
 });
 
+const quizSchema = Joi.array().items(
+    Joi.object({
+        question: Joi.string().required(),
+        option1: Joi.string().required(),
+        option2: Joi.string().required(),
+        option3: Joi.string().required(),
+        option4: Joi.string().required(),
+        correctOption: Joi.string().valid('option1', 'option2', 'option3', 'option4').required(),
+    })
+).required();
+
 const gptProfession = async (profession, grade) => {
     const prompt = `You are a schedule maker. You will make a schedule for a student between 9am to 3pm. 
     The schedule should include Classes, Duration, and Break Time in between each Class. This response must only be a JSON and you must check if the JSON is valid before submitting it.
@@ -74,4 +85,51 @@ const gptCompletion = async (messages) => {
     return chatCompletion.choices[0].message;
 };
 
-export { gptProfession, gptCompletion };
+const genQuiz = async (all) => {
+    const prompt = `You are a quiz generator. Based on the following course content, generate a quiz in JSON format. The quiz should consist of multiple-choice questions that test the students' understanding of the provided material. Each question should have four options, and one correct answer. Here is the course content: ${all}. The JSON format should be:
+    [
+        {
+            "question": "string",
+            "option1": "string",
+            "option2": "string",
+            "option3": "string",
+            "option4": "string",
+            "correctOption": "option1" // or option2, option3, option4
+        },
+        ...
+    ]
+    make sure that the format is correct and all the questions are relevant to the course content.
+    `;
+
+    for (let attempt = 1; attempt <= 10; attempt++) {
+        console.log(`Attempt ${attempt}`);
+        const gptResponse = await openai.chat.completions.create({
+            model: 'gpt-4o',
+            messages: [
+                {
+                    role: 'system',
+                    content: prompt,
+                },
+            ],
+        });
+
+        const responseContent = gptResponse.choices[0].message.content;
+
+        try {
+            const parsedResponse = JSON.parse(responseContent);
+            const validation = quizSchema.validate(parsedResponse);
+
+            if (validation.error) {
+                throw new Error("Validation failed");
+            }
+
+            return parsedResponse;
+        } catch (error) {
+            if (attempt === 10) {
+                throw new Error("Failed to get a valid JSON response after 10 attempts");
+            }
+        }
+    }
+};
+
+export { gptProfession, gptCompletion, genQuiz };
